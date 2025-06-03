@@ -1,0 +1,101 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "SovereignOS Agent Configuration",
+  "description": "Schema for agent.yaml files in SovereignOS v0.1",
+  "type": "object",
+  "properties": {
+    "version": {
+      "description": "Specification version of this agent config.",
+      "type": "string",
+      "const": "0.1.0"
+    },
+    "name": {
+      "description": "Unique name for the agent (e.g., ContractReviewer, SEOAuditor).",
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_-]+$"
+    },
+    "description": {
+      "description": "A brief description of what the agent does.",
+      "type": "string"
+    },
+    "llm_config": {
+      "description": "Configuration for the Large Language Model.",
+      "type": "object",
+      "properties": {
+        "provider": {
+          "description": "LLM provider (e.g., openai, anthropic, openrouter, local_ollama).",
+          "type": "string",
+          "default": "openrouter"
+        },
+        "model": {
+          "description": "Specific model name (e.g., gpt-4o, claude-3-opus, llama3-70b).",
+          "type": "string"
+        },
+        "temperature": {
+          "description": "Sampling temperature for the LLM.",
+          "type": "number",
+          "minimum": 0,
+          "maximum": 2,
+          "default": 0.7
+        },
+        "max_tokens": {
+          "description": "Maximum number of tokens to generate.",
+          "type": "integer",
+          "minimum": 1,
+          "default": 512
+        }
+      },
+      "required": ["model"]
+    },
+    "prompt_template": {
+      "description": "The template for the system prompt or main instruction for the agent. Can use {{placeholders}} for dynamic input.",
+      "type": "string"
+    },
+    "input_schema": {
+      "description": "JSON schema defining the expected input data for this agent when it's run.",
+      "type": "object",
+      "properties": {
+        "type": { "type": "string", "const": "object" },
+        "properties": { "type": "object" },
+        "required": { "type": "array", "items": { "type": "string" } }
+      },
+      "default": {
+        "type": "object",
+        "properties": {}
+      }
+    },
+    "tools": {
+      "description": "List of tools the agent has access to.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Name of the tool (e.g., web_search, file_read, code_interpreter).",
+            "type": "string"
+          },
+          "config": {
+            "description": "Optional configuration specific to the tool.",
+            "type": "object"
+          }
+        },
+        "required": ["name"]
+      },
+      "default": []
+    },
+    "output_parser": {
+        "description": "Specifies how to parse the LLM's raw output (e.g., extract JSON, list items). For v0.1, this might be just a hint.",
+        "type": "string",
+        "enum": ["raw_text", "json_extract"],
+        "default": "raw_text"
+    }
+  },
+  "required": [
+    "version",
+    "name",
+    "description",
+    "llm_config",
+    "prompt_template"
+  ],
+  "additionalProperties": false
+}

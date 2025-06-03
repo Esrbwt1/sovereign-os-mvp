@@ -1,0 +1,39 @@
+# This is a sample agent configuration file for SovereignOS v0.1
+# It should conform to agent.schema.json
+
+version: "0.1.0"
+
+name: "SimpleGreeter"
+description: "A basic agent that greets a user by name and mentions their favorite color."
+
+llm_config:
+  provider: "openrouter" # We'll aim to use OpenRouter for free model access
+  model: "gryphe/mythomix-l2-13b" # A decent free model on OpenRouter
+  temperature: 0.5
+  max_tokens: 150
+
+prompt_template: |
+  You are a friendly and concise assistant.
+  A user will provide their name and their favorite color.
+  Your task is to greet them warmly by name and make a positive comment about their favorite color.
+  Keep your response to 1-2 sentences.
+
+  User's Name: {{name}}
+  Favorite Color: {{color}}
+
+input_schema:
+  type: "object"
+  properties:
+    name:
+      type: "string"
+      description: "The name of the user."
+    color:
+      type: "string"
+      description: "The user's favorite color."
+  required:
+    - "name"
+    - "color"
+
+tools: [] # No tools needed for this simple agent
+
+output_parser: "raw_text"
