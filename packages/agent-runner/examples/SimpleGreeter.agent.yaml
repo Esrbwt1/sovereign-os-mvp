@@ -7,8 +7,8 @@ name: "SimpleGreeter"
 description: "A basic agent that greets a user by name and mentions their favorite color."
 
 llm_config:
-  provider: "openrouter" # We'll aim to use OpenRouter for free model access
-  model: "gryphe/mythomix-l2-13b" # A decent free model on OpenRouter
+  provider: "openrouter" 
+  model: "mistralai/mistral-7b-instruct" # <-- CHANGE THIS LINE
   temperature: 0.5
   max_tokens: 150
 
